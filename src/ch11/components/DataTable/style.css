@@ -1,0 +1,7 @@
+.table-main-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* 남은여백 전부 사용 */
+    box-sizing: border-box;
+    padding: 20px;
+}
