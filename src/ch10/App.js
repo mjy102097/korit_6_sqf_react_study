@@ -11,10 +11,10 @@ function App() {
     const [ userList, setUserList ] = useState([]);
 
     const inputRef = {
-        username: useRef(),
+        username: useRef(),  
         password: useRef(),
         name: useRef()
-    }
+    } 
 
     const handleInputKeyDown = (e) => {
         if(e.keyCode === 13) {
