@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./style.css";
 import Swal from "sweetalert2";
 
-function DataTableHeader( { mode, setMode, setProducts, setDeleting }) {
+function DataTableHeader( { mode, setMode, products, setProducts, setDeleting, editProductId }) {
     
     const emptyProduct = {
         id: "",
@@ -20,6 +20,13 @@ function DataTableHeader( { mode, setMode, setProducts, setDeleting }) {
     };
 
     const [ inputData, setInputData ] = useState({ ...emptyProduct });
+
+    useEffect(() => {
+        const [ product ] = products.filter(product => product.id === editProductId);
+        // 필터 조건에 맞는 값들을 배열 product에 한개씩 집어 넣음 (비구조 할당)
+        // 변수명 product에 [] 말고 맨뒤에 editProductId)[0] 해줘도 됨
+        setInputData(!product ? { ...emptyProduct } : { ...product });
+    }, [editProductId]);
 
     const handleInputChange = (e) => {
         setInputData(inputData => ({ // () 괄호를 하나 더 하면 함수가 아니라 값을 리턴하는 역활
@@ -64,9 +71,31 @@ function DataTableHeader( { mode, setMode, setProducts, setDeleting }) {
                 showConfirmButton: false,
                 timer: 500
             });
+            resetMode();
         }
         if(mode === 2) {
-            alert("상품수정");
+            Swal.fire({
+                title: "상품 정보 수정",
+                showCancelButton: true,
+                confirmButtonText: "확인",
+                cancelButtonText: "취소"
+            }).then((result) => {
+                if(result.isConformed) {
+                    setProducts(products => [ 
+                        ...products.map(product => { // 새로운 주소를 만들어 주기 위해 스프레드 사용 ...products
+                            if(product.id === editProductId) {
+                                const { id, ...rest } = inputData; // rest문법 : inputData에서 id를 제외하고 나머지를 rest에 넣어줌
+                                return {
+                                    ...product,
+                                    ...rest
+                                }
+                            }
+                            return product;
+                        })
+                    ]);
+                    resetMode();
+                }
+            });
         }
         if(mode === 3) {
             Swal.fire({
@@ -82,7 +111,6 @@ function DataTableHeader( { mode, setMode, setProducts, setDeleting }) {
                 }
             });
         }
-        resetMode();
     }
 
     const handleChangeClick = () => {
