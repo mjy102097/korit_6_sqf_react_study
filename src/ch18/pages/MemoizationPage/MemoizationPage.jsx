@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 function MemoizationPage(props) {
     const [ value, setValue ] = useState(0);
@@ -11,19 +11,26 @@ function MemoizationPage(props) {
         console.log(num);
         return num + 10;
     }, [num]);
+
+    const b = num + 20;
+
+    let c = null;
+    useEffect(() => {
+        c = num + 30;
+    }, [num]);
     
 
-    const handleChange = (e) => {
+    const handleChange = useCallback((e) => {
         setValue(e.target.value);
-    }
+    }, []);
 
     const handleChange2 = (e) => {
         setValue2(e.target.value);
     }
 
-    const handleClick = () => {
+    const handleClick = useCallback(() => {
         setNum(parseInt(value));
-    }
+    }, [value]);
 
     return (
         <div>
