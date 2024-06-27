@@ -5,6 +5,7 @@ import MainHeader from './components/MainHeader/MainHeader';
 import MainBody from './components/MainBody/MainBody';
 import { Global } from '@emotion/react'; // Global 전역 셋팅
 import { reset } from './styles/global';
+import { BrowserRouter } from 'react-router-dom';
 
 function App(props) {
     const [ isMainSidebarShow, setMainSidebarShow ] = useState(false);
